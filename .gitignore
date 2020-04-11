@@ -63,6 +63,3 @@ report.html
 
 #build folder
 build
-
-#node server
-server.js

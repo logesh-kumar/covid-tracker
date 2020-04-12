@@ -42,14 +42,29 @@ app.get("/covid/:country", async (req, res) => {
   res.status(200).json(response);
 });
 
-app.get("/covid/nearme/:long/:latt", async (req, res) => {
-  console.log(parseFloat(req.params.long), parseFloat(req.params.latt));
+app.get("/covid/nearme/:long/:latt/:distance", async (req, res) => {
+  if (
+    isNaN(req.params.distance) ||
+    isNaN(req.params.long) ||
+    isNaN(req.params.latt)
+  ) {
+    return res.status(500).json({ error: "Wrong distance format" });
+  }
+
+  if (req.params.distance > 1000) {
+    return res
+      .status(500)
+      .json({ error: "ditance cant be more that 1000 KMs" });
+  }
+
+  console.log(req.params.distance, req.params.long, req.params.latt);
+
   let response = null;
   try {
     response = await CovidTracker.find({
       location: {
         $near: {
-          $maxDistance: 1000,
+          $maxDistance: parseInt(req.params.distance) * 1000,
           $geometry: {
             type: "Point",
             coordinates: [

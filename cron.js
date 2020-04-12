@@ -6,7 +6,7 @@ const Covid = require("./src/Covid.model");
 let url = "https://pomber.github.io/covid19/timeseries.json";
 let settings = { method: "Get" };
 
-async function insertData() {
+const insertData = async () => {
   let respose = await fetch(url, settings);
   let covidData = await respose.json();
 
@@ -31,10 +31,14 @@ async function insertData() {
       console.log(error);
     }
   }
-}
+};
 
 cron.schedule("* * * * *", async () => {
   console.log("################STARTED INSERTING COVID DATA");
   //await insertData();
   console.log("################FINISHED INSERTING COVID DATA");
 });
+
+module.exports = {
+  insertData,
+};

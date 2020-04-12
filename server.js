@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
-require("./cron");
+const cronTask = require("./cron");
 const connectDb = require("./src/connection");
 const User = require("./src/User.model");
+const Covid = require("./src/Covid.model");
 
 const PORT = 5000;
 
@@ -18,6 +19,12 @@ app.get("/user-create", async (req, res) => {
   await user.save().then(() => console.log("User created"));
 
   res.send("User created \n");
+});
+
+app.get("/cron", async (req, res) => {
+  await Covid.remove({});
+  await cronTask.insertData();
+  res.send("Date imported \n");
 });
 
 app.listen(PORT, function () {

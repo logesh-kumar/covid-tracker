@@ -11,7 +11,13 @@ services:
   api:
     container_name: api
     restart: always
-    build: .
+    build:
+      context: .
+      args:
+        - NODE_ENV=NODE_ENV
+    volumes:
+      - .:/usr/src/app/
+      - /usr/src/app/node_modules
     ports:
       - 5000:5000
 volumes:
